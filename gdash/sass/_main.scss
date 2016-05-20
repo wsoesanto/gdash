@@ -1,0 +1,17 @@
+.volume-buttons {
+  padding: 10px 0;
+}
+
+.volume-start-button, .volume-stop-button {
+  color: white;
+}
+
+.volume-start-button {
+  background: rgb(28, 184, 65);
+}
+
+.volume-stop-button {
+  background: rgb(202, 60, 60);
+}
+
+@import 'dirtree';

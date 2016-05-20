@@ -1,0 +1,9 @@
+{
+  "extends": "google",
+  "globals": {
+    "define": false,
+    "Backbone": false,
+    "$": false,
+    "_": false
+  }
+}

@@ -1,0 +1,24 @@
+<li id="<%= model.get('name') %>" class="pure-menu-item">
+    <a href="/volume/<%= model.get('name') %>" class="pure-menu-link">
+        <div class="volume-menu">
+            <span class="volume-status <%= model.get('status') ? 'volume-start' : 'volume-stop' %>"></span>
+            <%= model.get('name') %>
+        </div>
+        <% if (model.get('status')) { %>
+        <div class="brick-desc">
+            <span>Bricks: </span>
+            <span class="brick-status">
+                <span class="brick-up">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                    <%= model.getNumberOfUpBrick() %>
+                </span>
+                <span class="brick-down">
+                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                    <%= model.getNumberOfDownBrick() %>
+                </span>
+                <span></span>
+            </span>
+        </div>
+        <% } %>
+    </a>
+</li>

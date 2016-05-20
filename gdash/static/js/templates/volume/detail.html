@@ -1,0 +1,49 @@
+<div class="header">
+    <h1><%= model.get('name') %></h1>
+    <div class="volume-buttons">
+        <% if (!model.get('status')) { %>
+        <a href="/" id="volume-start-button" class="pure-button volume-start-button">Start</a>
+        <% } %>
+    </div>
+</div>
+<div class="content">
+    <h2 class="content-subhead">Volume Information</h2>
+    <table class="pure-table pure-table-horizontal">
+        <tbody>
+        <tr>
+            <td>id</td>
+            <td><%= model.get('id') %></td>
+        </tr>
+        <tr>
+            <td>status</td>
+            <td><%= model.get('status') %></td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td><%= model.get('type') %></td>
+        </tr>
+        <tr>
+            <td>replica count</td>
+            <td><%= model.get('replica_count') %></td>
+        </tr>
+        <tr>
+            <td>number of bricks</td>
+            <td><%= model.get('brick_count') %></td>
+        </tr>
+        </tbody>
+    </table>
+    <h2 class="content-subhead">Volume Options</h2>
+    <table class="pure-table pure-table-horizontal">
+        <tbody>
+        <% _.each(model.get('options'), function(value, key) { %>
+        <tr>
+            <td><%= key %></td>
+            <td><%= value %></td>
+        </tr>
+        <% }); %>
+        </tbody>
+    </table>
+    <h2 class="content-subhead">Brick Layout</h2>
+    <div id="directory-tree"></div>
+    <div id="brick-chart"></div>
+</div>

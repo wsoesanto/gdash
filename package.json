@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "eslint": "^2.7.0",
+    "eslint-config-google": "^0.5.0",
+    "gulp": "~3.9.1",
+    "gulp-clean-css": "^2.0.7",
+    "gulp-sass": "~2.3.1"
+  },
+  "eslintConfig": {
+    "extends": "google"
+  }
+}

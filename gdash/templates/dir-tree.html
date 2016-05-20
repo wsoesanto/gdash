@@ -1,0 +1,13 @@
+<ul class="dir-tree">
+    <li class="directory">
+        <a rel="{{ dir_path }}">{{ name }}</a>
+        <layouts>
+            {% for host, layout in dir['layouts'].iteritems() %}
+                <layout host="{{ host }}" start="{{ layout['start'] }}" end="{{ layout['end'] }}"></layout>
+            {% endfor %}
+        </layouts>
+        {% for foldername, merge_dir_layout in dir['subfolders'].iteritems() %}
+            {{ helper.file_tree_list(dir_path, foldername, merge_dir_layout)|safe }}
+        {% endfor %}
+    </li>
+</ul>
