@@ -1,9 +1,14 @@
 require.config({
     paths: {
         text: "https://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.12/text.min",
-        async: "https://cdnjs.cloudflare.com/ajax/libs/requirejs-plugins/1.0.3/async.min",
-        propertyParser: "https://cdnjs.cloudflare.com/ajax/libs/requirejs-plugins/1.0.3/propertyParser.min",
-        goog: "https://cdnjs.cloudflare.com/ajax/libs/requirejs-plugins/1.0.3/goog.min"
+        highcharts: "https://code.highcharts.com/highcharts",
+        highchartsMore: "https://code.highcharts.com/highcharts-more"
+    },
+    shim: {
+        highchartsMore: {
+            deps:["highcharts"],
+            exports: "HighchartsMore"
+        }
     }
 });
 
