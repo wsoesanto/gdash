@@ -1,85 +1,91 @@
 "use strict";
 
 define([
-    "lib/jQueryFileTree",
-    "highchartsMore"
-], function () {
-    return Backbone.View.extend({
-        el: "#directory-tree",
-        initialize: function (volumeName) {
-            this.volumeName = volumeName;
+  "text!templates/brick/dir-tree.html",
+  "highchartsMore"
+], function(dirTreeTemplate) {
+  return Backbone.View.extend({
+    el: "#directory-tree",
+    dirTreeTemplate: _.template(dirTreeTemplate),
+    initialize: function(volumeName) {
+      this.volumeName = volumeName;
+    },
+    render: function() {
+      this.$el.html("Unable to get file tree information");
+
+      var _this = this;
+      $.ajax({
+        url: "/api/volume/" + this.volumeName + "/bricks/range",
+        type: 'GET'
+      }).done(function(data) {
+        var $content = _this.renderDirTree("root", data, _this);
+        _this.$el.html($content);
+        _this.$el.delegate("li a", "click", _this.renderGraph);
+      });
+    },
+    renderDirTree: function(name, dirLayout, _this) {
+      var content = _this.dirTreeTemplate({
+        name: name,
+        layouts: dirLayout.layouts
+      });
+      var $content = $(content);
+      var $subfoldersContent = $();
+      _.each(dirLayout.subfolders, function(subfolderLayout, subfolderName) {
+        $subfoldersContent = $subfoldersContent.add(_this.renderDirTree(subfolderName, subfolderLayout, _this));
+      });
+      $content.find(".directory").append($subfoldersContent);
+      return $content;
+    },
+    renderGraph: function(event) {
+      var $el = $(event.target);
+      var $layouts = $el.next();
+
+      var xAxisData = [];
+      var yAxisData = [];
+      $layouts.children().each(function() {
+        xAxisData.push(
+          $(this).attr("host")
+        );
+        yAxisData.push({
+          low: Number($(this).attr("start")),
+          high: Number($(this).attr("end"))
+        });
+      });
+
+      $("#brick-chart").highcharts({
+        exporting: {
+          enabled: false
         },
-        render: function () {
-            this.$el.fileTree({
-                root: "/",
-                script: "/volume/" + this.volumeName + "/bricks/range/dir-tree"
-            }, this.renderPie);
+        title: {
+          text: "Volume's layout"
         },
-        renderPie: function (event) {
-            var $el = $(event.target);
-            var $layouts = $el.next();
-
-            var xAxisData = [];
-            var yAxisData = [];
-            $layouts.children().each(function () {
-                xAxisData.push(
-                    $(this).attr("host")
-                );
-                yAxisData.push({
-                    low: Number($(this).attr("start")),
-                    high: Number($(this).attr("end"))
-                });
-            });
-
-            $("#brick-chart").highcharts({
-                exporting: {
-                    enabled: false
-                },
-                title: {
-                    text: "Volume's layout"
-                },
-                chart: {
-                    type: 'columnrange',
-                    inverted: true,
-                    animation: false
-                },
-                plotOptions: {
-                    columnrange: {
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function () {
-                                return "0x" + this.y.toString(16);
-                            }
-                        },
-                        animation: false
-                    }
-                },
-                series: [{
-                    name: 'Range',
-                    data: yAxisData
-                }],
-                xAxis: {
-                    categories: xAxisData
-                },
-                yAxis: {
-                    visible: false
-                }
-            });
-
-            // var data = new google.visualization.DataTable();
-            // data.addColumn("string", "Host");
-            // data.addColumn("number", "Populartiy");
-            // data.addColumn({type: "string", role: "tooltip"});
-            // _.each(layoutsArr, function (layout) {
-            //     data.addRow([layout.host, layout.end - layout.start, "Range: " + layout.start + " to " + layout.end]);
-            // });
-            //
-            // var options = {
-            //     title: "Bricks Layout"
-            // };
-            //
-            // var chart = new google.visualization.PieChart(document.getElementById("brick-chart"));
-            // chart.draw(data, options);
+        chart: {
+          type: 'columnrange',
+          inverted: true,
+          animation: false
+        },
+        plotOptions: {
+          columnrange: {
+            dataLabels: {
+              enabled: true,
+              formatter: function() {
+                return "0x" + this.y.toString(16);
+              }
+            },
+            animation: false
+          }
+        },
+        series: [{
+          name: 'Range',
+          data: yAxisData
+        }],
+        xAxis: {
+          categories: xAxisData
+        },
+        yAxis: {
+          visible: false
         }
-    });
+      });
+    }
+  });
 });

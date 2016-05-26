@@ -1,0 +1,10 @@
+<ul class="dir-tree">
+    <li class="directory">
+        <a><%= name %></a>
+        <layouts>
+            <% _.each(layouts, function(layout, host) { %>
+                <layout host="<%= host %>" start="<%= layout.start %>" end="<%= layout.end %>"></layout>
+            <% }); %>
+        </layouts>
+    </li>
+</ul>
